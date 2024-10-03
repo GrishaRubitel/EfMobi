@@ -22,6 +22,7 @@ type SoundData struct {
 	VideoLink   string    `gorm:"unique;size:255" json:"video_link"`
 }
 
+// Удаление записи о треке по названию и имени исполнителя
 func DeleteSoundFromLib(db *gorm.DB, title string, artist string) (int, string, error) {
 	var sound SoundData
 	if err := db.Where("title ilike ? AND artist ilike ?", skipSpaces(title), skipSpaces(artist)).First(&sound).Error; err != nil {
@@ -43,6 +44,7 @@ func DeleteSoundFromLib(db *gorm.DB, title string, artist string) (int, string, 
 	return http.StatusOK, "record successfully deleted - " + resp, nil
 }
 
+// Извлечение информации об одном или нексольких треках с одним и тем же названием
 func SelectSoundData(db *gorm.DB, title string, artist string, offset int, limit int) (string, error) {
 	var soundData []SoundData
 
@@ -64,6 +66,7 @@ func SelectSoundData(db *gorm.DB, title string, artist string, offset int, limit
 	}
 }
 
+// Извлечение информации обо всех треках библиотеки с фильтрацией по всем (почти) атрибутам
 func SelectWholeLibData(db *gorm.DB, data map[string]string, offset int, limit int) (string, error) {
 	var libData []SoundData
 
@@ -97,6 +100,7 @@ func SelectWholeLibData(db *gorm.DB, data map[string]string, offset int, limit i
 	}
 }
 
+// Создание записи о треке с использованием информации, полученной из Spotify Web API
 func CreateSoundWithJSON(db *gorm.DB, in map[string]interface{}) (string, error) {
 	var newSound SoundData
 
@@ -153,6 +157,7 @@ func CreateSoundWithJSON(db *gorm.DB, in map[string]interface{}) (string, error)
 	}
 }
 
+// Извлечение текста трека с пагинацией по строкам (куплетам)
 func SelectLyrics(db *gorm.DB, title string, artist string) (string, error) {
 	var sound SoundData
 	res := db.Table("sound_data").Where("title ilike ?", skipSpaces(title)).Where("artist ilike ?", skipSpaces(artist)).Find(&sound)
@@ -164,6 +169,7 @@ func SelectLyrics(db *gorm.DB, title string, artist string) (string, error) {
 	}
 }
 
+// Создание записи о треке с использованием информации, полученной от клиента
 func CreateSoundSimple(db *gorm.DB, title string, artist string) (string, error) {
 	var sound SoundData
 	sound.Artist = artist
@@ -175,6 +181,7 @@ func CreateSoundSimple(db *gorm.DB, title string, artist string) (string, error)
 	return res, err
 }
 
+// Обновление информации о существующем треке
 func UpdateExistingSound(db *gorm.DB, title string, artist string, data map[string]string) (int, string, error) {
 	var soundData SoundData
 

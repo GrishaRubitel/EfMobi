@@ -14,6 +14,7 @@ import (
 
 var loger = logrus.New()
 
+// Возвращает response клиенту
 func ResponseReturner(code int, resp string, err error, c *gin.Context) {
 	if err != nil {
 		loger.Warn(err)
@@ -24,6 +25,7 @@ func ResponseReturner(code int, resp string, err error, c *gin.Context) {
 	}
 }
 
+// Чтение параметров из тела запроса
 func ReadBodyData(c *gin.Context) (int, map[string]string, error) {
 	var bodyData map[string]interface{}
 
@@ -55,6 +57,7 @@ func ReadBodyData(c *gin.Context) (int, map[string]string, error) {
 	return http.StatusOK, result, nil
 }
 
+// Чтение параметров запроса
 func ReadQueryParams(c *gin.Context) map[string]string {
 	paramsData := make(map[string]string)
 
@@ -67,6 +70,7 @@ func ReadQueryParams(c *gin.Context) map[string]string {
 	return paramsData
 }
 
+// Перевод какого-либо объекта в JSON
 func ToJSON(data interface{}) (string, error) {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
@@ -76,22 +80,7 @@ func ToJSON(data interface{}) (string, error) {
 	return string(jsonData), nil
 }
 
-func GetNestedMap(m map[string]interface{}, keys ...string) (map[string]interface{}, error) {
-	current := m
-	for _, key := range keys {
-		if val, ok := current[key]; ok {
-			if nestedMap, ok := val.(map[string]interface{}); ok {
-				current = nestedMap
-			} else {
-				return nil, fmt.Errorf("key '%s' does not contain a map", key)
-			}
-		} else {
-			return nil, fmt.Errorf("key '%s' not found", key)
-		}
-	}
-	return current, nil
-}
-
+// Вызов API для получения Spotify Access Token'a
 func CallTokenAPI(url string) (int, string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -107,6 +96,7 @@ func CallTokenAPI(url string) (int, string, error) {
 	return resp.StatusCode, string(body), nil
 }
 
+// Вызов любой другой API для последующего обращения к Spotify Web API
 func CallOuterApi(url string) (int, map[string]interface{}, error) {
 	client := &http.Client{}
 

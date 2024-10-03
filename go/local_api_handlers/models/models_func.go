@@ -9,6 +9,7 @@ import (
 
 var loger = logrus.New()
 
+// Миграция моделей в БД
 func MigrateModels(db *gorm.DB) {
 	if err := db.Migrator().CreateTable(ArtistData{}); err != nil {
 		loger.Warn("failed to create artist_data table: " + err.Error())
@@ -21,10 +22,12 @@ func MigrateModels(db *gorm.DB) {
 	createForeignKey(db)
 }
 
+// Замена пробелов на "любое количество символов" для фильтрации во время выполнения SQL запросов
 func skipSpaces(str string) string {
 	return "%" + strings.ReplaceAll(str, " ", "%") + "%"
 }
 
+// Создание внешнего ключа между двумя существующими таблицами
 func createForeignKey(db *gorm.DB) {
 	err := db.Exec(`ALTER TABLE sound_data
                     ADD CONSTRAINT fk_sound_data_artist_data

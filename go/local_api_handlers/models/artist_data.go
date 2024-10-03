@@ -17,6 +17,7 @@ type ArtistData struct {
 	Genres      datatypes.JSON `json:"genres"`
 }
 
+// Извлечение информации как об одном артисте, так и обо всех сразу (с пагинацией)
 func SelectArtistData(db *gorm.DB, artist string, offset int, limit int) ([]ArtistData, error) {
 	var artistData []ArtistData
 
@@ -34,6 +35,7 @@ func SelectArtistData(db *gorm.DB, artist string, offset int, limit int) ([]Arti
 	}
 }
 
+// Создание записи об артисте, используя JSON, полученный из Spotify Web API
 func CreateArtistWithJSON(db *gorm.DB, in map[string]interface{}) (string, error) {
 	var newArtist ArtistData
 
@@ -54,6 +56,7 @@ func CreateArtistWithJSON(db *gorm.DB, in map[string]interface{}) (string, error
 	}
 }
 
+// Создание записи об артисте, используя клиентские данные
 func CreateArtistSimple(db *gorm.DB, artist string) {
 	var newArtist ArtistData
 	newArtist.Artist = artist

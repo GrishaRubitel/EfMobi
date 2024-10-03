@@ -13,6 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Функция API для получения информации об одном или нескольких треков с одним и тем же названием
 func getSoundData(db *gorm.DB, data map[string]string) (int, string, error) {
 	if title, ok := data["title"]; !ok {
 		return http.StatusBadRequest, "", errors.New("title field required")
@@ -29,6 +30,7 @@ func getSoundData(db *gorm.DB, data map[string]string) (int, string, error) {
 	}
 }
 
+// Функция API для получения информации об указанном артисте, либо же обо всех с базе
 func getArtistData(db *gorm.DB, data map[string]string) (int, string, error) {
 	offset, limit := handleOffsetAndLimit(data)
 
@@ -45,6 +47,7 @@ func getArtistData(db *gorm.DB, data map[string]string) (int, string, error) {
 	}
 }
 
+// Функция API для получения целой библотеки треков, с фильтром по всем атрибутам
 func getAllSoundsData(db *gorm.DB, data map[string]string) (int, string, error) {
 	offset, limit := handleOffsetAndLimit(data)
 	wholeLib, err := models.SelectWholeLibData(db, data, offset, limit)
@@ -55,6 +58,7 @@ func getAllSoundsData(db *gorm.DB, data map[string]string) (int, string, error) 
 	}
 }
 
+// Функция API для удаления трека с соответсвующим названием соответствующего исполнителя
 func patchDeleteSound(db *gorm.DB, data map[string]string) (int, string, error) {
 	title, artist, code, err := handleTitleAndArtist(data)
 	if err != nil {
@@ -66,6 +70,7 @@ func patchDeleteSound(db *gorm.DB, data map[string]string) (int, string, error) 
 	}
 }
 
+// Функция API для добавления в базу нового трека
 func postNewSound(db *gorm.DB, data map[string]string) (int, string, error) {
 	title, artist, code, err := handleTitleAndArtist(data)
 	if err != nil {
@@ -98,6 +103,7 @@ func postNewSound(db *gorm.DB, data map[string]string) (int, string, error) {
 	}
 }
 
+// Функция API для получения текста определенного трека, будь то всего, будь то с ограничением по количеству строк (куплетов)
 func getSoundLyrics(db *gorm.DB, data map[string]string) (int, string, error) {
 	title, artist, code, err := handleTitleAndArtist(data)
 	if err != nil {
@@ -113,6 +119,7 @@ func getSoundLyrics(db *gorm.DB, data map[string]string) (int, string, error) {
 	}
 }
 
+// Функция API для обновления информации о существующем треке
 func patchExistingSound(db *gorm.DB, data map[string]string) (int, string, error) {
 	title, artist, code, err := handleTitleAndArtist(data)
 	if err != nil {
@@ -127,6 +134,7 @@ func patchExistingSound(db *gorm.DB, data map[string]string) (int, string, error
 	}
 }
 
+// Функция API для "запуска" DML скрипта (заполнение БД тестовыми данными)
 func executeSQLFile(db *gorm.DB, filepath string) string {
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -141,13 +149,14 @@ func executeSQLFile(db *gorm.DB, filepath string) string {
 		return ""
 	}
 
+	nullTable = false
+
 	err = db.Exec(string(content)).Error
 	if err != nil {
 		loger.Warn("failed to execute SQL content")
 		return ""
 	}
 
-	nullTable = false
 	resp := "dml executed successfully"
 	return resp
 }

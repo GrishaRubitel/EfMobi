@@ -17,9 +17,10 @@ import (
 )
 
 var loger = logrus.New()
-var tokenAddress string
-var nullTable bool = true
+var tokenAddress string   // Адрес для обращения ко внутрисервисным API
+var nullTable bool = true // Булеан с фактом заполнения БД тестовыми данными
 
+// Точка входа для запуска клиентских API
 func main() {
 	envMap, err := godotenv.Read("../../.env")
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 	"unicode"
 )
 
+// Функция по отбору строк из текста
 func extractStrings(lyrics string, limit int, offset int) string {
 	var result []string
 	var currentSubstring strings.Builder
@@ -47,6 +48,7 @@ func extractStrings(lyrics string, limit int, offset int) string {
 	return strings.Join(result, " ")
 }
 
+// Извлечение параметров Offset и Limit из клиентского запроса
 func handleOffsetAndLimit(data map[string]string) (int, int) {
 	offset, err := strconv.Atoi(data["offset"])
 	if err != nil {
@@ -67,6 +69,7 @@ func handleOffsetAndLimit(data map[string]string) (int, int) {
 	return offset, limit
 }
 
+// Извлечение параметров Title и Artist из клиентского запроса
 func handleTitleAndArtist(data map[string]string) (string, string, int, error) {
 	if title, ok := data["title"]; !ok {
 		return "", "", http.StatusBadRequest, errors.New("title parameter required")

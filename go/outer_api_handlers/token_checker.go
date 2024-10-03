@@ -16,6 +16,7 @@ type activeToken struct {
 	timer        int64
 }
 
+// Запрос нового Spotify Web API access token
 func (aT *activeToken) initToken() error {
 	data := url.Values{}
 	data.Set("grant_type", "client_credentials")
@@ -65,6 +66,7 @@ func (aT *activeToken) initToken() error {
 	return nil
 }
 
+// Проверка нынешнего access token'a на действительность
 func (aT *activeToken) checkToken() (string, error) {
 	if aT.timer <= time.Now().Unix() {
 		if err := aT.initToken(); err != nil {

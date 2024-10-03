@@ -17,6 +17,7 @@ import (
 
 var loger = logrus.New()
 
+// Точка входа для запуска внутрисервисных API
 func main() {
 	envMap, err := godotenv.Read("../../.env")
 	if err != nil {
@@ -64,6 +65,7 @@ func main() {
 	router.Run(envMap["TOKEN_FINDER_ADDRESS"])
 }
 
+// Перевод Spotify Web API response к более читаемому виду (вроде это делает)
 func PrettyPrintJSON(rawJSON []byte) (string, error) {
 	var prettyJSON bytes.Buffer
 

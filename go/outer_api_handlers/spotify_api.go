@@ -9,6 +9,7 @@ import (
 	"net/url"
 )
 
+// Запрос трека в Spotify Web API
 func searchTrack(title string, artist string, aT activeToken, proxyURL string) (int, []byte, error) {
 	apiURL := fmt.Sprintf("https://api.spotify.com/v1/search?q=track%%3D%s%%26artist%%3D%s&type=track&limit=1&offset=0", url.QueryEscape(title), url.QueryEscape(artist))
 
