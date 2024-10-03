@@ -69,15 +69,15 @@ func SelectWholeLibData(db *gorm.DB, data map[string]string, offset int, limit i
 
 	query := db.Table("sound_data sd").Offset(offset).Limit(limit)
 
-	if da, ok := data["release_date"]; ok {
-		d, err := time.Parse("02-01-2006", da)
-		if err != nil {
-			loger.Warn("invalid or non-existing date variable, skipping it - ", err.Error())
-		} else {
-			query = query.Where("release_date = ?", d.Format("2006-01-02"))
-			delete(data, "release_date")
-		}
-	}
+	// if da, ok := data["release_date"]; ok {
+	// 	d, err := time.Parse("02-01-2006", da)
+	// 	if err != nil {
+	// 		loger.Warn("invalid or non-existing date variable, skipping it - ", err.Error())
+	// 	} else {
+	// 		query = query.Where("release_date = ?", d.Format("2006-01-02"))
+	// 		delete(data, "release_date")
+	// 	}
+	// }
 
 	for key, val := range data {
 		filter := fmt.Sprintf("%s ilike ?", key)

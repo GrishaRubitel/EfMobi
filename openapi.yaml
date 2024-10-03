@@ -95,10 +95,10 @@ paths:
           in: query
           schema:
             $ref: "#/components/schemas/artist"
-        - name: release_date
-          in: query
-          schema:
-            $ref: "#/components/schemas/release_date"
+        # - name: release_date
+        #   in: query
+        #   schema:
+        #     $ref: "#/components/schemas/release_date"
         - name: lyrics
           in: query
           schema:
